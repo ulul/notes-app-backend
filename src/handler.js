@@ -8,6 +8,29 @@ const getAllNotesHandler = () => ({
   },
 });
 
+const getNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+  const note = notes.filter((item) => item.id === id)[0];
+
+  if (note !== undefined) {
+    const response = h.response({
+      status: 'success',
+      data: {
+        note,
+      },
+    });
+    response.code(200);
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Catatan tidak ditemukan',
+  });
+  response.code(400);
+  return response;
+};
+
 const addNoteHandler = (request, h) => {
   const { title, tags, body } = request.payload;
 
@@ -31,14 +54,14 @@ const addNoteHandler = (request, h) => {
         noteId: id,
       },
     });
-    response.code = 201;
+    response.code(201);
     return response;
   }
   const response = h.response({
     status: 'failed',
     message: 'Catatan gagal ditambahkan',
   });
-  response.code = 500;
+  response.code(500);
   return response;
 };
 
@@ -60,9 +83,9 @@ const editNoteByIdHandler = (request, h) => {
     };
     const response = h.response({
       status: 'success',
-      message: 'Catatan berhasil diperbaharui',
+      message: 'Catatan berhasil diperbarui',
     });
-    response.code = 200;
+    response.code(200);
     return response;
   }
 
@@ -70,7 +93,7 @@ const editNoteByIdHandler = (request, h) => {
     status: 'fail',
     message: 'Catatan gagal diperbaharui',
   });
-  response.code = 400;
+  response.code(400);
   return response;
 };
 
@@ -85,19 +108,20 @@ const deleteNoteByIdHandler = (request, h) => {
       status: 'success',
       message: 'Catatan berhasil dihapus',
     });
-    response.code = 200;
+    response.code(200);
     return response;
   }
   const response = h.response({
     status: 'fail',
     message: 'Catatan gagal dihapus',
   });
-  response.code = 400;
+  response.code(400);
   return response;
 };
 
 module.exports = {
   getAllNotesHandler,
+  getNoteByIdHandler,
   addNoteHandler,
   editNoteByIdHandler,
   deleteNoteByIdHandler,
